@@ -84,8 +84,9 @@
     }
 
     .stat-value {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
     .stat-label {
@@ -93,6 +94,7 @@
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
+      margin-top: 4px;
     }
 
     nav {
@@ -367,14 +369,13 @@
     <div class="section-header">
       <div>
         <div class="section-title color-skill">Most Skill</div>
-        <div class="section-desc">Ranked by K/D ratio and overall performance</div>
+        <div class="section-desc">Ranked by overall performance</div>
       </div>
     </div>
     <div id="content-skill">
       <div class="empty-container">
-        <h2>🧠</h2>
         <div class="empty-title">Awaiting Data</div>
-        <div class="empty-subtitle">Leaderboard will populate when Season 4 begins</div>
+        <div class="empty-subtitle">Stats will update every 24 hours</div>
       </div>
     </div>
   </section>
@@ -386,13 +387,7 @@
         <div class="section-desc">Total player eliminations</div>
       </div>
     </div>
-    <div id="content-kills">
-      <div class="empty-container">
-        <h2>⚔️</h2>
-        <div class="empty-title">Awaiting Data</div>
-        <div class="empty-subtitle">Leaderboard will populate when Season 4 begins</div>
-      </div>
-    </div>
+    <div id="content-kills"></div>
   </section>
 
   <section class="leaderboard-section" id="view-deaths">
@@ -402,29 +397,17 @@
         <div class="section-desc">Total times eliminated</div>
       </div>
     </div>
-    <div id="content-deaths">
-      <div class="empty-container">
-        <h2>💀</h2>
-        <div class="empty-title">Awaiting Data</div>
-        <div class="empty-subtitle">Leaderboard will populate when Season 4 begins</div>
-      </div>
-    </div>
+    <div id="content-deaths"></div>
   </section>
 
   <section class="leaderboard-section" id="view-playtime">
     <div class="section-header">
       <div>
         <div class="section-title color-playtime">Most Playtime</div>
-        <div class="section-desc">Total hours spent on the server</div>
+        <div class="section-desc">Total minutes spent in-game</div>
       </div>
     </div>
-    <div id="content-playtime">
-      <div class="empty-container">
-        <h2>⏱️</h2>
-        <div class="empty-title">Awaiting Data</div>
-        <div class="empty-subtitle">Leaderboard will populate when Season 4 begins</div>
-      </div>
-    </div>
+    <div id="content-playtime"></div>
   </section>
 </main>
 
@@ -433,6 +416,9 @@
 </footer>
 
 <script>
+  // CHANGE THIS TO YOUR PUBLIC IP ONCE HOSTED
+  const API_BASE = "http://localhost:3000/api";
+
   const buttons = document.querySelectorAll('.nav-btn');
   const sections = document.querySelectorAll('.leaderboard-section');
 
@@ -440,92 +426,63 @@
     btn.addEventListener('click', () => {
       buttons.forEach(b => b.classList.remove('active'));
       sections.forEach(s => s.classList.remove('active'));
-      
       btn.classList.add('active');
-      const targetId = 'view-' + btn.getAttribute('data-target');
-      document.getElementById(targetId).classList.add('active');
+      document.getElementById('view-' + btn.dataset.target).classList.add('active');
     });
   });
 
-  function renderData(containerId, dataList, themeColor, dataLabel) {
-    const container = document.getElementById(containerId);
-    if (!dataList || dataList.length === 0) return;
-    
-    const maxValue = dataList[0].score || 1;
-    const tableEl = document.createElement('table');
-    tableEl.className = 'leaderboard-table';
-    
-    let theadHTML = '<thead><tr><th>Rank</th><th>Player</th><th></th><th class="align-right">' + dataLabel + '</th></tr></thead>';
-    let tbodyHTML = '<tbody>';
-    
-    dataList.forEach((item, index) => {
-      const percentage = Math.round((item.score / maxValue) * 100);
-      let rankClass = '';
-      if (index === 0) rankClass = 'rank-1';
-      if (index === 1) rankClass = 'rank-2';
-      if (index === 2) rankClass = 'rank-3';
-      
-      const avatarUrl = 'https://mc-heads.net/avatar/' + encodeURIComponent(item.id || item.username) + '/44';
-      
-      tbodyHTML += '<tr class="player-row">';
-      tbodyHTML += '<td class="rank-col ' + rankClass + '">#' + (index + 1) + '</td>';
-      tbodyHTML += '<td><div class="player-info"><div class="player-avatar"><img src="' + avatarUrl + '" alt="' + item.username + '" onerror="this.src=\'https://mc-heads.net/avatar/steve/44\'"></div><div><div class="player-name">' + item.username + '</div><div class="player-platform">Minecraft</div></div></div></td>';
-      tbodyHTML += '<td class="progress-col"><div class="progress-track"><div class="progress-fill bg-' + themeColor + '" style="width:' + percentage + '%"></div></div></td>';
-      tbodyHTML += '<td class="score-col color-' + themeColor + '">' + Number(item.score).toLocaleString() + '</td>';
-      tbodyHTML += '</tr>';
-    });
-    
-    tbodyHTML += '</tbody>';
-    tableEl.innerHTML = theadHTML + tbodyHTML;
-    
-    container.innerHTML = '';
-    container.appendChild(tableEl);
-  }
-
   async function updateOnlineStatus() {
     try {
-      const response = await fetch('http://localhost:3000/api/online');
-      const data = await response.json();
-      document.getElementById('online-count').textContent = data.online;
-    } catch (error) {
+      const res = await fetch(`${API_BASE}/online`);
+      const data = await res.json();
+      document.getElementById('online-count').textContent = data.online || 0;
+    } catch (e) {
       document.getElementById('online-count').textContent = '0';
     }
   }
 
-  async function loadLeaderboardData() {
+  async function loadStats() {
     try {
-      const response = await fetch('http://localhost:3000/api/stats');
-      const data = await response.json();
+      const res = await fetch(`${API_BASE}/stats`);
+      const data = await res.json();
+      if (!data || data.length === 0) return;
 
-      if (data && data.length > 0) {
-        // Most Kills
-        const killsData = [...data].sort((a, b) => b.kills - a.kills).map(p => ({ username: p.username, score: p.kills, id: p.uuid }));
-        renderData('content-kills', killsData, 'kills', 'KILLS');
-
-        // Most Deaths
-        const deathsData = [...data].sort((a, b) => b.deaths - a.deaths).map(p => ({ username: p.username, score: p.deaths, id: p.uuid }));
-        renderData('content-deaths', deathsData, 'deaths', 'DEATHS');
-
-        // Playtime
-        const playtimeData = [...data].sort((a, b) => b.playtime - a.playtime).map(p => ({ username: p.username, score: p.playtime, id: p.uuid }));
-        renderData('content-playtime', playtimeData, 'playtime', 'MINUTES');
-
-        // Skill (Custom Logic: Kills/Deaths ratio or simple combined score)
-        const skillData = [...data].sort((a, b) => (b.kills - b.deaths) - (a.kills - a.deaths)).map(p => ({ username: p.username, score: (p.kills - p.deaths), id: p.uuid }));
-        renderData('content-skill', skillData, 'skill', 'SKILL SCORE');
-      }
-    } catch (error) {
-      console.error('Failed to load stats:', error);
+      render('content-kills', [...data].sort((a,b) => b.kills - a.kills), 'kills', 'KILLS', 'kills');
+      render('content-deaths', [...data].sort((a,b) => b.deaths - a.deaths), 'deaths', 'DEATHS', 'deaths');
+      render('content-playtime', [...data].sort((a,b) => b.playtime - a.playtime), 'playtime', 'MINUTES', 'playtime');
+      render('content-skill', [...data].sort((a,b) => b.kills - b.deaths - (a.kills - a.deaths)), 'skill', 'SCORE', 'kills');
+    } catch (e) {
+      console.error("Stats fetch error:", e);
     }
   }
 
-  // Initial Load
+  function render(id, list, theme, label, scoreKey) {
+    const wrap = document.getElementById(id);
+    if (!list.length) return;
+    const max = list[0][scoreKey] || 1;
+    
+    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th></th><th class="align-right">${label}</th></tr></thead><tbody>`;
+    
+    list.forEach((p, i) => {
+      const pct = Math.min(100, Math.round((p[scoreKey] / max) * 100));
+      const rCls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+      html += `
+        <tr class="player-row">
+          <td class="rank-col ${rCls}">#${i+1}</td>
+          <td><div class="player-info">
+            <div class="player-avatar"><img src="https://mc-heads.net/avatar/${p.uuid}/44" onerror="this.src='https://mc-heads.net/avatar/steve/44'"></div>
+            <div><div class="player-name">${p.username}</div><div class="player-platform">Minecraft</div></div>
+          </div></td>
+          <td class="progress-col"><div class="progress-track"><div class="progress-fill bg-${theme}" style="width:${pct}%"></div></div></td>
+          <td class="score-col color-${theme}">${Number(p[scoreKey]).toLocaleString()}</td>
+        </tr>`;
+    });
+    wrap.innerHTML = html + `</tbody></table>`;
+  }
+
   updateOnlineStatus();
-  loadLeaderboardData();
-
-  // Refresh Online Count every 10s
-  setInterval(updateOnlineStatus, 10000);
+  loadStats();
+  setInterval(updateOnlineStatus, 15000);
 </script>
-
 </body>
 </html>
