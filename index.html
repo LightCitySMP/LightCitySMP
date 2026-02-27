@@ -30,7 +30,6 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     .title {
@@ -40,18 +39,11 @@
       color: #FFD700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      text-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
     }
 
-    .subtitle { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-top: 5px; }
+    .subtitle { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 4px; margin-top: 5px; }
 
-    .search-container {
-      margin-top: 20px;
-      width: 100%;
-      max-width: 400px;
-      position: relative;
-    }
-
+    .search-container { margin-top: 20px; width: 100%; max-width: 400px; }
     .search-input {
       width: 100%;
       background: var(--bg-main);
@@ -59,15 +51,10 @@
       padding: 12px 20px;
       border-radius: 8px;
       color: white;
-      font-family: 'Poppins', sans-serif;
       outline: none;
-      transition: border-color 0.3s;
     }
 
-    .search-input:focus { border-color: #FFD700; }
-
-    nav { display: flex; justify-content: center; gap: 15px; padding: 30px 20px; background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-main) 100%); }
-
+    nav { display: flex; justify-content: center; gap: 15px; padding: 30px 20px; }
     .nav-btn {
       background-color: var(--bg-card);
       color: var(--text-muted);
@@ -76,88 +63,56 @@
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
-
-    .nav-btn.active[data-target="skill"] { color: var(--bg-main); background-color: var(--accent-skill); }
-    .nav-btn.active[data-target="kills"] { color: var(--text-main); background-color: var(--accent-kills); }
-    .nav-btn.active[data-target="deaths"] { color: var(--text-main); background-color: var(--accent-deaths); }
-    .nav-btn.active[data-target="playtime"] { color: var(--bg-main); background-color: var(--accent-playtime); }
+    .nav-btn.active[data-target="skill"] { background-color: var(--accent-skill); color: #000; }
+    .nav-btn.active[data-target="kills"] { background-color: var(--accent-kills); color: #fff; }
+    .nav-btn.active[data-target="deaths"] { background-color: var(--accent-deaths); color: #fff; }
+    .nav-btn.active[data-target="playtime"] { background-color: var(--accent-playtime); color: #000; }
 
     main { max-width: 1100px; margin: 0 auto; padding: 20px; }
-    .leaderboard-section { display: none; animation: fadeIn 0.4s ease-out forwards; }
+    .leaderboard-section { display: none; }
     .leaderboard-section.active { display: block; }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+    .leaderboard-table tr.player-row { background-color: var(--bg-card); }
+    .leaderboard-table tr.hidden { display: none; }
+    .leaderboard-table td { padding: 15px 20px; }
+    
+    .rank-col { width: 80px; font-size: 24px; font-weight: 700; color: #FFD700; }
+    .player-info { display: flex; align-items: center; gap: 15px; }
+    .player-avatar { width: 40px; height: 40px; border-radius: 4px; overflow: hidden; }
+    .player-avatar img { width: 100%; height: 100%; }
+    .score-col { text-align: right; font-size: 24px; font-weight: 700; }
 
-    .section-header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
-    .section-title { font-size: 32px; font-weight: 700; }
     .color-skill { color: var(--accent-skill); }
     .color-kills { color: var(--accent-kills); }
     .color-deaths { color: var(--accent-deaths); }
     .color-playtime { color: var(--accent-playtime); }
-
-    .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-    .leaderboard-table th { text-align: left; color: var(--text-muted); font-size: 12px; text-transform: uppercase; padding: 0 20px 10px; }
-    .leaderboard-table tr.player-row { background-color: var(--bg-card); transition: transform 0.2s; }
-    .leaderboard-table tr.player-row.hidden { display: none; }
-    .leaderboard-table tr.player-row:hover { background-color: var(--bg-hover); transform: scale(1.01); }
-    .leaderboard-table td { padding: 15px 20px; }
-    
-    .rank-col { width: 80px; font-size: 24px; font-weight: 700; color: var(--text-muted); }
-    .rank-1 { color: #FFD700; }
-    .rank-2 { color: #C0C0C0; }
-    .rank-3 { color: #CD7F32; }
-
-    .player-info { display: flex; align-items: center; gap: 15px; }
-    .player-avatar { width: 40px; height: 40px; border-radius: 4px; overflow: hidden; background: #000; }
-    .player-avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .player-name { font-size: 16px; font-weight: 600; }
-
-    .score-col { text-align: right; font-size: 24px; font-weight: 700; }
-
-    footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border-color); }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-brand">
-    <div class="title">LightCitySMP</div>
-    <div class="subtitle">Official Season 4 Leaderboards</div>
-  </div>
+  <div class="title">LightCitySMP</div>
+  <div class="subtitle">Season 4 Leaderboards</div>
   <div class="search-container">
     <input type="text" id="playerSearch" class="search-input" placeholder="Search for a player...">
   </div>
 </header>
 
 <nav>
-  <button class="nav-btn active" data-target="skill">🧠 Most Skill</button>
+  <button class="nav-btn active" data-target="skill">🧠 Skill</button>
   <button class="nav-btn" data-target="kills">⚔️ Kills</button>
   <button class="nav-btn" data-target="deaths">💀 Deaths</button>
   <button class="nav-btn" data-target="playtime">⏱️ Playtime</button>
 </nav>
 
 <main>
-  <section class="leaderboard-section active" id="view-skill">
-    <div class="section-header"><div class="section-title color-skill">Most Skill</div></div>
-    <div id="content-skill"></div>
-  </section>
-  <section class="leaderboard-section" id="view-kills">
-    <div class="section-header"><div class="section-title color-kills">Most Kills</div></div>
-    <div id="content-kills"></div>
-  </section>
-  <section class="leaderboard-section" id="view-deaths">
-    <div class="section-header"><div class="section-title color-deaths">Most Deaths</div></div>
-    <div id="content-deaths"></div>
-  </section>
-  <section class="leaderboard-section" id="view-playtime">
-    <div class="section-header"><div class="section-title color-playtime">Most Playtime</div></div>
-    <div id="content-playtime"></div>
-  </section>
+  <section class="leaderboard-section active" id="view-skill"><div id="content-skill"></div></section>
+  <section class="leaderboard-section" id="view-kills"><div id="content-kills"></div></section>
+  <section class="leaderboard-section" id="view-deaths"><div id="content-deaths"></div></section>
+  <section class="leaderboard-section" id="view-playtime"><div id="content-playtime"></div></section>
 </main>
-
-<footer>LightCitySMP &copy; 2026</footer>
 
 <script>
   const buttons = document.querySelectorAll('.nav-btn');
@@ -173,7 +128,6 @@
     });
   });
 
-  // Filter players across all lists
   searchInput.addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     document.querySelectorAll('.player-row').forEach(row => {
@@ -186,24 +140,20 @@
     try {
       const res = await fetch('stats.json?t=' + Date.now());
       const data = await res.json();
-
       render('content-kills', [...data].sort((a,b) => b.kills - a.kills), 'kills', 'KILLS', 'kills');
       render('content-deaths', [...data].sort((a,b) => b.deaths - a.deaths), 'deaths', 'DEATHS', 'deaths');
       render('content-playtime', [...data].sort((a,b) => b.playtime - a.playtime), 'playtime', 'MINS', 'playtime');
       render('content-skill', [...data].sort((a,b) => b.skill - a.skill), 'skill', 'POINTS', 'skill');
-    } catch (e) { 
-      console.error("Failed to load stats.json. Ensure there is a comma after your 'playtime' line!", e); 
-    }
+    } catch (e) { console.error(e); }
   }
 
   function render(id, list, theme, label, key) {
-    let html = `<table class="leaderboard-table"><thead><tr><th>#</th><th>Player</th><th style="text-align:right">${label}</th></tr></thead><tbody>`;
+    let html = `<table class="leaderboard-table"><tbody>`;
     list.forEach((p, i) => {
-      const rCls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
       html += `<tr class="player-row" data-name="${p.username}">
-        <td class="rank-col ${rCls}">#${i+1}</td>
+        <td class="rank-col">#${i+1}</td>
         <td><div class="player-info">
-          <div class="player-avatar"><img src="https://mc-heads.net/avatar/${p.uuid}/44"></div>
+          <div class="player-avatar"><img src="https://mc-heads.net/avatar/${p.username}/44" onerror="this.src='https://mc-heads.net/avatar/steve/44'"></div>
           <div class="player-name">${p.username}</div>
         </div></td>
         <td class="score-col color-${theme}">${p[key]}</td>
