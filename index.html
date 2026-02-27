@@ -19,91 +19,54 @@
       --border-color: #262d3d;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Poppins', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
     header {
       background-color: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
-      padding: 20px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .header-brand {
+      padding: 30px 40px;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     .title {
       font-family: 'Cinzel', serif;
-      font-size: 38px;
+      font-size: 42px;
       font-weight: 800;
       color: #FFD700;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      text-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
     }
 
-    .subtitle {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 500;
-      margin-top: 2px;
+    .subtitle { font-size: 14px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 4px; font-weight: 500; margin-top: 5px; }
+
+    .search-container {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
     }
 
-    .header-stats {
-      display: flex;
-      gap: 20px;
-    }
-
-    .stat-box {
-      background-color: var(--bg-main);
+    .search-input {
+      width: 100%;
+      background: var(--bg-main);
       border: 1px solid var(--border-color);
+      padding: 12px 20px;
       border-radius: 8px;
-      padding: 10px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 100px;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+      transition: border-color 0.3s;
     }
 
-    .stat-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-main);
-    }
+    .search-input:focus { border-color: #FFD700; }
 
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 4px;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 30px 20px;
-      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-main) 100%);
-    }
+    nav { display: flex; justify-content: center; gap: 15px; padding: 30px 20px; background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-main) 100%); }
 
     .nav-btn {
       background-color: var(--bg-card);
@@ -111,235 +74,49 @@
       border: 1px solid var(--border-color);
       padding: 12px 24px;
       border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .nav-btn:hover {
-      color: var(--text-main);
-      border-color: var(--text-muted);
-      transform: translateY(-2px);
-    }
+    .nav-btn.active[data-target="skill"] { color: var(--bg-main); background-color: var(--accent-skill); }
+    .nav-btn.active[data-target="kills"] { color: var(--text-main); background-color: var(--accent-kills); }
+    .nav-btn.active[data-target="deaths"] { color: var(--text-main); background-color: var(--accent-deaths); }
+    .nav-btn.active[data-target="playtime"] { color: var(--bg-main); background-color: var(--accent-playtime); }
 
-    .nav-btn.active[data-target="skill"] { color: var(--bg-main); background-color: var(--accent-skill); border-color: var(--accent-skill); }
-    .nav-btn.active[data-target="kills"] { color: var(--text-main); background-color: var(--accent-kills); border-color: var(--accent-kills); }
-    .nav-btn.active[data-target="deaths"] { color: var(--text-main); background-color: var(--accent-deaths); border-color: var(--accent-deaths); }
-    .nav-btn.active[data-target="playtime"] { color: var(--bg-main); background-color: var(--accent-playtime); border-color: var(--accent-playtime); }
+    main { max-width: 1100px; margin: 0 auto; padding: 20px; }
+    .leaderboard-section { display: none; animation: fadeIn 0.4s ease-out forwards; }
+    .leaderboard-section.active { display: block; }
 
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .leaderboard-section {
-      display: none;
-      animation: fadeIn 0.4s ease-out forwards;
-    }
-
-    .leaderboard-section.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .section-title {
-      font-size: 36px;
-      font-weight: 700;
-    }
-
-    .section-desc {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
+    .section-header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+    .section-title { font-size: 32px; font-weight: 700; }
     .color-skill { color: var(--accent-skill); }
     .color-kills { color: var(--accent-kills); }
     .color-deaths { color: var(--accent-deaths); }
     .color-playtime { color: var(--accent-playtime); }
 
-    .leaderboard-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 8px;
-    }
+    .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+    .leaderboard-table th { text-align: left; color: var(--text-muted); font-size: 12px; text-transform: uppercase; padding: 0 20px 10px; }
+    .leaderboard-table tr.player-row { background-color: var(--bg-card); transition: transform 0.2s; }
+    .leaderboard-table tr.player-row.hidden { display: none; }
+    .leaderboard-table tr.player-row:hover { background-color: var(--bg-hover); transform: scale(1.01); }
+    .leaderboard-table td { padding: 15px 20px; }
+    
+    .rank-col { width: 80px; font-size: 24px; font-weight: 700; color: var(--text-muted); }
+    .rank-1 { color: #FFD700; }
+    .rank-2 { color: #C0C0C0; }
+    .rank-3 { color: #CD7F32; }
 
-    .leaderboard-table th {
-      text-align: left;
-      color: var(--text-muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 0 20px 10px 20px;
-      font-weight: 500;
-    }
+    .player-info { display: flex; align-items: center; gap: 15px; }
+    .player-avatar { width: 40px; height: 40px; border-radius: 4px; overflow: hidden; background: #000; }
+    .player-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .player-name { font-size: 16px; font-weight: 600; }
 
-    .leaderboard-table th.align-right {
-      text-align: right;
-    }
+    .score-col { text-align: right; font-size: 24px; font-weight: 700; }
 
-    .leaderboard-table tr.player-row {
-      background-color: var(--bg-card);
-      transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-
-    .leaderboard-table tr.player-row:hover {
-      background-color: var(--bg-hover);
-      transform: scale(1.01);
-    }
-
-    .leaderboard-table td {
-      padding: 16px 20px;
-    }
-
-    .leaderboard-table tr.player-row td:first-child {
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-    }
-
-    .leaderboard-table tr.player-row td:last-child {
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-    }
-
-    .rank-col {
-      width: 80px;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .rank-1 { color: #FFD700; font-size: 28px; }
-    .rank-2 { color: #9ca3af; font-size: 26px; }
-    .rank-3 { color: #b45309; font-size: 26px; }
-
-    .player-info {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .player-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 6px;
-      background-color: var(--bg-main);
-      overflow: hidden;
-    }
-
-    .player-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .player-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .player-platform {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .progress-col {
-      width: 30%;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 6px;
-      background-color: var(--bg-main);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 3px;
-    }
-
-    .bg-skill { background-color: var(--accent-skill); }
-    .bg-kills { background-color: var(--accent-kills); }
-    .bg-deaths { background-color: var(--accent-deaths); }
-    .bg-playtime { background-color: var(--accent-playtime); }
-
-    .score-col {
-      text-align: right;
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .empty-container {
-      background-color: var(--bg-card);
-      border: 1px dashed var(--border-color);
-      border-radius: 12px;
-      padding: 60px 20px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .empty-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-top: 15px;
-      color: var(--text-main);
-    }
-
-    .empty-subtitle {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 20px;
-      border-top: 1px solid var(--border-color);
-      margin-top: 40px;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-      }
-      .header-stats {
-        width: 100%;
-        justify-content: center;
-      }
-      .progress-col {
-        display: none;
-      }
-      nav {
-        flex-wrap: wrap;
-      }
-    }
+    footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border-color); }
   </style>
 </head>
 <body>
@@ -347,80 +124,45 @@
 <header>
   <div class="header-brand">
     <div class="title">LightCitySMP</div>
-    <div class="subtitle">Season 4 Official Leaderboards</div>
+    <div class="subtitle">Official Season 4 Leaderboards</div>
   </div>
-  <div class="header-stats">
-    <div class="stat-box">
-      <div id="online-count" class="stat-value">0</div>
-      <div class="stat-label">Online</div>
-    </div>
+  <div class="search-container">
+    <input type="text" id="playerSearch" class="search-input" placeholder="Search for a player...">
   </div>
 </header>
 
 <nav>
   <button class="nav-btn active" data-target="skill">🧠 Most Skill</button>
-  <button class="nav-btn" data-target="kills">⚔️ Most Kills</button>
-  <button class="nav-btn" data-target="deaths">💀 Most Deaths</button>
+  <button class="nav-btn" data-target="kills">⚔️ Kills</button>
+  <button class="nav-btn" data-target="deaths">💀 Deaths</button>
   <button class="nav-btn" data-target="playtime">⏱️ Playtime</button>
 </nav>
 
 <main>
   <section class="leaderboard-section active" id="view-skill">
-    <div class="section-header">
-      <div>
-        <div class="section-title color-skill">Most Skill</div>
-        <div class="section-desc">Ranked by overall performance</div>
-      </div>
-    </div>
-    <div id="content-skill">
-      <div class="empty-container">
-        <div class="empty-title">Awaiting Data</div>
-        <div class="empty-subtitle">Stats will update every 24 hours</div>
-      </div>
-    </div>
+    <div class="section-header"><div class="section-title color-skill">Most Skill</div></div>
+    <div id="content-skill"></div>
   </section>
-
   <section class="leaderboard-section" id="view-kills">
-    <div class="section-header">
-      <div>
-        <div class="section-title color-kills">Most Kills</div>
-        <div class="section-desc">Total player eliminations</div>
-      </div>
-    </div>
+    <div class="section-header"><div class="section-title color-kills">Most Kills</div></div>
     <div id="content-kills"></div>
   </section>
-
   <section class="leaderboard-section" id="view-deaths">
-    <div class="section-header">
-      <div>
-        <div class="section-title color-deaths">Most Deaths</div>
-        <div class="section-desc">Total times eliminated</div>
-      </div>
-    </div>
+    <div class="section-header"><div class="section-title color-deaths">Most Deaths</div></div>
     <div id="content-deaths"></div>
   </section>
-
   <section class="leaderboard-section" id="view-playtime">
-    <div class="section-header">
-      <div>
-        <div class="section-title color-playtime">Most Playtime</div>
-        <div class="section-desc">Total minutes spent in-game</div>
-      </div>
-    </div>
+    <div class="section-header"><div class="section-title color-playtime">Most Playtime</div></div>
     <div id="content-playtime"></div>
   </section>
 </main>
 
-<footer>
-  LightCitySMP Season 4 &copy; All rights reserved
-</footer>
+<footer>LightCitySMP &copy; 2026</footer>
 
 <script>
-  // CHANGE THIS TO YOUR PUBLIC IP ONCE HOSTED
-  const API_BASE = "http://localhost:3000/api";
-
   const buttons = document.querySelectorAll('.nav-btn');
   const sections = document.querySelectorAll('.leaderboard-section');
+  const searchInput = document.getElementById('playerSearch');
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -431,58 +173,46 @@
     });
   });
 
-  async function updateOnlineStatus() {
-    try {
-      const res = await fetch(`${API_BASE}/online`);
-      const data = await res.json();
-      document.getElementById('online-count').textContent = data.online || 0;
-    } catch (e) {
-      document.getElementById('online-count').textContent = '0';
-    }
-  }
+  // Filter players across all lists
+  searchInput.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('.player-row').forEach(row => {
+      const name = row.getAttribute('data-name').toLowerCase();
+      row.classList.toggle('hidden', !name.includes(term));
+    });
+  });
 
-  async function loadStats() {
+  async function loadData() {
     try {
-      const res = await fetch(`${API_BASE}/stats`);
+      const res = await fetch('stats.json?t=' + Date.now());
       const data = await res.json();
-      if (!data || data.length === 0) return;
 
       render('content-kills', [...data].sort((a,b) => b.kills - a.kills), 'kills', 'KILLS', 'kills');
       render('content-deaths', [...data].sort((a,b) => b.deaths - a.deaths), 'deaths', 'DEATHS', 'deaths');
-      render('content-playtime', [...data].sort((a,b) => b.playtime - a.playtime), 'playtime', 'MINUTES', 'playtime');
-      render('content-skill', [...data].sort((a,b) => b.kills - b.deaths - (a.kills - a.deaths)), 'skill', 'SCORE', 'kills');
-    } catch (e) {
-      console.error("Stats fetch error:", e);
+      render('content-playtime', [...data].sort((a,b) => b.playtime - a.playtime), 'playtime', 'MINS', 'playtime');
+      render('content-skill', [...data].sort((a,b) => b.skill - a.skill), 'skill', 'POINTS', 'skill');
+    } catch (e) { 
+      console.error("Failed to load stats.json. Ensure there is a comma after your 'playtime' line!", e); 
     }
   }
 
-  function render(id, list, theme, label, scoreKey) {
-    const wrap = document.getElementById(id);
-    if (!list.length) return;
-    const max = list[0][scoreKey] || 1;
-    
-    let html = `<table class="leaderboard-table"><thead><tr><th>Rank</th><th>Player</th><th></th><th class="align-right">${label}</th></tr></thead><tbody>`;
-    
+  function render(id, list, theme, label, key) {
+    let html = `<table class="leaderboard-table"><thead><tr><th>#</th><th>Player</th><th style="text-align:right">${label}</th></tr></thead><tbody>`;
     list.forEach((p, i) => {
-      const pct = Math.min(100, Math.round((p[scoreKey] / max) * 100));
       const rCls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-      html += `
-        <tr class="player-row">
-          <td class="rank-col ${rCls}">#${i+1}</td>
-          <td><div class="player-info">
-            <div class="player-avatar"><img src="https://mc-heads.net/avatar/${p.uuid}/44" onerror="this.src='https://mc-heads.net/avatar/steve/44'"></div>
-            <div><div class="player-name">${p.username}</div><div class="player-platform">Minecraft</div></div>
-          </div></td>
-          <td class="progress-col"><div class="progress-track"><div class="progress-fill bg-${theme}" style="width:${pct}%"></div></div></td>
-          <td class="score-col color-${theme}">${Number(p[scoreKey]).toLocaleString()}</td>
-        </tr>`;
+      html += `<tr class="player-row" data-name="${p.username}">
+        <td class="rank-col ${rCls}">#${i+1}</td>
+        <td><div class="player-info">
+          <div class="player-avatar"><img src="https://mc-heads.net/avatar/${p.uuid}/44"></div>
+          <div class="player-name">${p.username}</div>
+        </div></td>
+        <td class="score-col color-${theme}">${p[key]}</td>
+      </tr>`;
     });
-    wrap.innerHTML = html + `</tbody></table>`;
+    document.getElementById(id).innerHTML = html + `</tbody></table>`;
   }
 
-  updateOnlineStatus();
-  loadStats();
-  setInterval(updateOnlineStatus, 15000);
+  loadData();
 </script>
 </body>
 </html>
