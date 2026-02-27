@@ -349,7 +349,7 @@
   </div>
   <div class="header-stats">
     <div class="stat-box">
-      <div class="stat-value">—</div>
+      <div id="online-count" class="stat-value">0</div>
       <div class="stat-label">Online</div>
     </div>
   </div>
@@ -451,7 +451,7 @@
     const container = document.getElementById(containerId);
     if (!dataList || dataList.length === 0) return;
     
-    const maxValue = dataList[0].score;
+    const maxValue = dataList[0].score || 1;
     const tableEl = document.createElement('table');
     tableEl.className = 'leaderboard-table';
     
@@ -469,7 +469,7 @@
       
       tbodyHTML += '<tr class="player-row">';
       tbodyHTML += '<td class="rank-col ' + rankClass + '">#' + (index + 1) + '</td>';
-      tbodyHTML += '<td><div class="player-info"><div class="player-avatar"><img src="' + avatarUrl + '" alt="' + item.username + '" onerror="this.style.display=\'none\'"></div><div><div class="player-name">' + item.username + '</div><div class="player-platform">Minecraft</div></div></div></td>';
+      tbodyHTML += '<td><div class="player-info"><div class="player-avatar"><img src="' + avatarUrl + '" alt="' + item.username + '" onerror="this.src=\'https://mc-heads.net/avatar/steve/44\'"></div><div><div class="player-name">' + item.username + '</div><div class="player-platform">Minecraft</div></div></div></td>';
       tbodyHTML += '<td class="progress-col"><div class="progress-track"><div class="progress-fill bg-' + themeColor + '" style="width:' + percentage + '%"></div></div></td>';
       tbodyHTML += '<td class="score-col color-' + themeColor + '">' + Number(item.score).toLocaleString() + '</td>';
       tbodyHTML += '</tr>';
@@ -481,6 +481,50 @@
     container.innerHTML = '';
     container.appendChild(tableEl);
   }
+
+  async function updateOnlineStatus() {
+    try {
+      const response = await fetch('http://localhost:3000/api/online');
+      const data = await response.json();
+      document.getElementById('online-count').textContent = data.online;
+    } catch (error) {
+      document.getElementById('online-count').textContent = '0';
+    }
+  }
+
+  async function loadLeaderboardData() {
+    try {
+      const response = await fetch('http://localhost:3000/api/stats');
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        // Most Kills
+        const killsData = [...data].sort((a, b) => b.kills - a.kills).map(p => ({ username: p.username, score: p.kills, id: p.uuid }));
+        renderData('content-kills', killsData, 'kills', 'KILLS');
+
+        // Most Deaths
+        const deathsData = [...data].sort((a, b) => b.deaths - a.deaths).map(p => ({ username: p.username, score: p.deaths, id: p.uuid }));
+        renderData('content-deaths', deathsData, 'deaths', 'DEATHS');
+
+        // Playtime
+        const playtimeData = [...data].sort((a, b) => b.playtime - a.playtime).map(p => ({ username: p.username, score: p.playtime, id: p.uuid }));
+        renderData('content-playtime', playtimeData, 'playtime', 'MINUTES');
+
+        // Skill (Custom Logic: Kills/Deaths ratio or simple combined score)
+        const skillData = [...data].sort((a, b) => (b.kills - b.deaths) - (a.kills - a.deaths)).map(p => ({ username: p.username, score: (p.kills - p.deaths), id: p.uuid }));
+        renderData('content-skill', skillData, 'skill', 'SKILL SCORE');
+      }
+    } catch (error) {
+      console.error('Failed to load stats:', error);
+    }
+  }
+
+  // Initial Load
+  updateOnlineStatus();
+  loadLeaderboardData();
+
+  // Refresh Online Count every 10s
+  setInterval(updateOnlineStatus, 10000);
 </script>
 
 </body>
