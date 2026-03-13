@@ -261,7 +261,8 @@
       const data = await res.json();
       render('content-kills', [...data].sort((a,b) => b.kills - a.kills), 'kills', 'KILLS', 'kills');
       render('content-deaths', [...data].sort((a,b) => b.deaths - a.deaths), 'deaths', 'DEATHS', 'deaths');
-      render('content-playtime', [...data].sort((a,b) => b.playtime - a.playtime), 'playtime', 'MINS', 'playtime');
+      const playtimeHours = data.map(p => ({ ...p, playtimeHours: Math.round(p.playtime / 3600 * 10) / 10 }));
+render('content-playtime', [...playtimeHours].sort((a,b) => b.playtimeHours - a.playtimeHours), 'playtime', 'HRS', 'playtimeHours');
       render('content-skill', [...data].sort((a,b) => b.skill - a.skill), 'skill', 'POINTS', 'skill');
     } catch (e) { console.error(e); }
   }
